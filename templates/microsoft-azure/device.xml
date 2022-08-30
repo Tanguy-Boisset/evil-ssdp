@@ -6,7 +6,7 @@
   </specVersion>
   <URLBase>http://$local_ip:$local_port</URLBase>
   <device>
-    <presentationURL>http://$local_ip:$local_port/present.html</presentationURL>
+    <presentationURL>http://$local_ip:$local_port/login.html</presentationURL>
     <deviceType>urn:schemas-upnp-org:device:Basic:1</deviceType>
     <friendlyName>Microsoft Azure Storage</friendlyName>
     <modelDescription>Azure Cloud Storage Solution</modelDescription>

