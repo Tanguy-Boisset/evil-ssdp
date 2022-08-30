@@ -217,6 +217,7 @@ def build_class(upnp_args):
     realm = upnp_args['realm']
     local_ip = upnp_args['local_ip']
     local_port = upnp_args['local_port']
+    quiet = upnp_args['quiet']
 
     class UPNPObject(BaseHTTPRequestHandler):
         """Spoofed UPnP object
@@ -421,9 +422,10 @@ def build_class(upnp_args):
             verb = self.command
             path = self.path
             if 'xml' in self.path:
-                print(PC.xml_box + "Host: {}, User-Agent: {}"
-                      .format(address, agent))
-                print("               {} {}".format(verb, path))
+                if not quiet:
+                    print(PC.xml_box + "Host: {}, User-Agent: {}"
+                        .format(address, agent))
+                    print("               {} {}".format(verb, path))
             elif 'xxe.html' in self.path:
                 data = PC.xxe_box + "Host: {}, User-Agent: {}\n".format(
                     address, agent)
@@ -509,6 +511,11 @@ def process_args():
                         help=('Run in analyze mode. Will NOT respond to any'
                               ' SSDP queries, but will still enable and run'
                               ' the web server for testing.'))
+    parser.add_argument("-q", "--quiet", action="store_true",
+                        default=False,
+                        help=('Run in quiet mode, printing only the lines '
+                              'concerning phish hooked and credentials '
+                              'stolen.'))
     args = parser.parse_args()
 
     # The following two lines help to avoid command injection in bash.
@@ -522,6 +529,7 @@ def process_args():
     args.is_auth = args.basic
     args.realm = args.realm
     args.redirect_url = args.url
+    args.quiet = args.quiet
 
     if not os.path.isdir(args.template_dir):
         print("\nSorry, that template directory does not exist. "
@@ -636,7 +644,8 @@ def main():
                  'is_auth':args.is_auth,
                  'local_ip':local_ip,
                  'realm':args.realm,
-                 'local_port':args.local_port}
+                 'local_port':args.local_port,
+                 'quiet': args.quiet}
 
     upnp = build_class(upnp_args)
 
