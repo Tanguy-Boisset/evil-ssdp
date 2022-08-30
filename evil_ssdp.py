@@ -402,7 +402,7 @@ def build_class(upnp_args):
             Will append important info to a log file. This includes credentials
             given via basic auth as well as XXE vulnerabilities.
             """
-            with open('logs-essdp.txt', 'a') as log_file:
+            with open('creds_log.txt', 'a') as log_file:
                 time_stamp = formatdate(timeval=None, localtime=True,
                                         usegmt=False)
                 log_file.write(time_stamp + ":    " + data + "\n")
