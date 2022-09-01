@@ -14,6 +14,7 @@ There are multiple use cases, but the primary ideas are:
 """
 
 try:
+    import urllib.parse
     from multiprocessing import Process
     from string import Template
     from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -405,7 +406,7 @@ def build_class(upnp_args):
             with open('creds_log.txt', 'a') as log_file:
                 time_stamp = formatdate(timeval=None, localtime=True,
                                         usegmt=False)
-                log_file.write(time_stamp + ":    " + data + "\n")
+                log_file.write(time_stamp + ":    " + urllib.parse.unquote(data) + "\n")
                 log_file.close()
 
         def log_message(self, format, *args):
@@ -437,7 +438,7 @@ def build_class(upnp_args):
                 post_body = self.rfile.read(content_length)
                 credentials = post_body.decode('utf-8')
                 data = PC.creds_box + "HOST: {}, FORM-POST CREDS: {}".format(
-                    address, credentials)
+                    urllib.parse.unquote(address), urllib.parse.unquote(credentials))
                 print(data)
                 self.write_log(data)
             elif 'data.dtd' in self.path:
